@@ -100,14 +100,6 @@ These are auto-seeded on startup:
 4. (Optional but recommended) Send `POST /api/auth/logout` with same token.
 5. Call `GET /api/protected/profile` again with same token to confirm invalidation.
 
-## Required Screenshots for Submission
-Capture at least 3 screenshots and place them in `screenshots/`:
-1. `01-login-token.png`:
-   - Postman login request body with username/password.
-   - Response showing JWT token.
-2. `02-protected-route-success.png`:
-   - Protected route request with Authorization header.
-   - Successful protected response.
 
 
 ## Notes on Session Management
