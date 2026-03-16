@@ -13,10 +13,9 @@ This project implements JWT authentication with login, protected routes, and log
 
 ```text
 jwt-auth-spring/
-├── screenshots/                      # Add assessment screenshots here
+├── screenshots/                      
 │   ├── 01-login-token.png
 │   ├── 02-protected-route-success.png
-│   └── 03-logout-token-invalidated.png
 ├── src/main/java/com/example/jwtauth/
 │   ├── config/
 │   │   ├── DataInitializer.java
@@ -92,19 +91,7 @@ These are auto-seeded on startup:
   }
   ```
 
-### 3) Logout (Optional but implemented)
-- Method: `POST`
-- URL: `http://localhost:5000/api/auth/logout`
-- Header:
-  - `Authorization: Bearer <JWT_TOKEN>`
-- Response:
-  ```json
-  {
-    "message": "Logged out successfully. Token invalidated."
-  }
-  ```
 
-After logout, using the same token on the protected route returns unauthorized.
 
 ## Postman Testing Steps
 1. Send `POST /api/auth/login` with valid username and password.
@@ -121,9 +108,7 @@ Capture at least 3 screenshots and place them in `screenshots/`:
 2. `02-protected-route-success.png`:
    - Protected route request with Authorization header.
    - Successful protected response.
-3. `03-logout-token-invalidated.png`:
-   - Logout request success response.
-   - Re-using same token on protected route showing unauthorized.
+
 
 ## Notes on Session Management
 - The backend is stateless (`SessionCreationPolicy.STATELESS`).
