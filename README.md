@@ -1,4 +1,4 @@
-# JWT Authentication with Spring Boot (Experiment 6)
+# JWT Authentication with Spring Boot (Experiment 8[Formaly-6])
 
 This project implements JWT authentication with backend APIs and a React frontend that consumes those APIs using session-based JWT storage.
 
@@ -140,22 +140,3 @@ These are auto-seeded on startup:
 4. Remove `token` from Session Storage and refresh `/dashboard`; verify redirect to login.
 5. Click `Logout`; verify token is removed and user is redirected to login.
 
-## Required Screenshots for Submission
-Capture and place the following screenshots in `screenshots/`:
-1. `01-frontend-login.png`
-  - React login page with successful sign-in flow.
-2. `02-session-storage-token.png`
-  - Browser DevTools showing JWT token in Session Storage.
-3. `03-protected-response-ui.png`
-  - Dashboard showing successful protected API response.
-4. `04-unauthorized-redirect.png`
-  - Attempted dashboard access without token redirecting to login.
-5. `05-logout-flow.png`
-  - Logout action and cleared session state.
-
-
-## Notes on Session Management
-- The backend is stateless (`SessionCreationPolicy.STATELESS`).
-- The frontend keeps JWT in browser `sessionStorage` (session scoped).
-- JWT token expiry is configurable using `app.jwt.expiration-ms`.
-- Logout is handled by token blacklisting in memory until token expiration.
