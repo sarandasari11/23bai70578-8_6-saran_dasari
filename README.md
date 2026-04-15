@@ -1,6 +1,6 @@
-# JWT Authentication with Spring Boot
+# JWT Authentication with Spring Boot (Experiment 6)
 
-This project implements JWT authentication with login, protected routes, and logout token invalidation.
+This project implements JWT authentication with backend APIs and a React frontend that consumes those APIs using session-based JWT storage.
 
 ## Tech Stack
 - Spring Boot 3
@@ -8,11 +8,27 @@ This project implements JWT authentication with login, protected routes, and log
 - Spring Data JPA
 - H2 Database
 - JJWT (io.jsonwebtoken)
+- React (Create React App)
+- Axios
+- Bootstrap
+- Material UI
 
 ## Project Structure
 
 ```text
 jwt-auth-spring/
+├── frontend/
+│   ├── public/
+│   │   └── index.html
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Dashboard.js
+│   │   │   ├── Login.js
+│   │   │   └── ProtectedRoute.js
+│   │   ├── App.css
+│   │   ├── App.js
+│   │   └── index.js
+│   └── package.json
 ├── screenshots/                      
 │   ├── 01-login-token.png
 │   ├── 02-protected-route-success.png
@@ -44,12 +60,17 @@ jwt-auth-spring/
 ```
 
 ## Setup
-1. Open terminal inside `jwt-auth-spring`.
-2. Run:
+1. Open terminal inside `jwt-auth-spring` and run backend:
    ```bash
    mvn clean spring-boot:run
    ```
-3. Server starts at `http://localhost:5000`.
+2. Backend server starts at `http://localhost:5000`.
+3. Open a new terminal inside `jwt-auth-spring/frontend` and run:
+  ```bash
+  npm install
+  npm start
+  ```
+4. Frontend runs at `http://localhost:3000`.
 
 ## Demo Credentials
 These are auto-seeded on startup:
@@ -91,18 +112,50 @@ These are auto-seeded on startup:
   }
   ```
 
+### 3) Logout (Optional API + Required UI Session Clear)
+- Method: `POST`
+- URL: `http://localhost:5000/api/auth/logout`
+- Header:
+  - `Authorization: Bearer <JWT_TOKEN>`
+- Frontend also clears token with:
+  - `sessionStorage.removeItem("token")`
+
+## Frontend Flow (Session-Based UI)
+1. Open `http://localhost:3000` (Login page).
+2. Submit username and password.
+3. Frontend calls `POST /api/auth/login`.
+4. On success, JWT is stored in `sessionStorage` with key `token`.
+5. User is redirected to `/dashboard`.
+6. Dashboard calls `GET /api/protected/profile` with header:
+   - `Authorization: Bearer <token>`
+7. If token is missing/invalid, user is redirected to login.
+8. Logout removes token from `sessionStorage` and redirects to login.
 
 
-## Postman Testing Steps
-1. Send `POST /api/auth/login` with valid username and password.
-2. Copy JWT from response.
-3. Send `GET /api/protected/profile` with `Authorization: Bearer <token>`.
-4. (Optional but recommended) Send `POST /api/auth/logout` with same token.
-5. Call `GET /api/protected/profile` again with same token to confirm invalidation.
 
+## Frontend Testing Steps
+1. Login with `user123 / password123` from the React UI.
+2. Open DevTools > Application > Session Storage and verify `token` exists.
+3. Go to dashboard and click `Fetch Protected API` to show protected response on UI.
+4. Remove `token` from Session Storage and refresh `/dashboard`; verify redirect to login.
+5. Click `Logout`; verify token is removed and user is redirected to login.
+
+## Required Screenshots for Submission
+Capture and place the following screenshots in `screenshots/`:
+1. `01-frontend-login.png`
+  - React login page with successful sign-in flow.
+2. `02-session-storage-token.png`
+  - Browser DevTools showing JWT token in Session Storage.
+3. `03-protected-response-ui.png`
+  - Dashboard showing successful protected API response.
+4. `04-unauthorized-redirect.png`
+  - Attempted dashboard access without token redirecting to login.
+5. `05-logout-flow.png`
+  - Logout action and cleared session state.
 
 
 ## Notes on Session Management
 - The backend is stateless (`SessionCreationPolicy.STATELESS`).
+- The frontend keeps JWT in browser `sessionStorage` (session scoped).
 - JWT token expiry is configurable using `app.jwt.expiration-ms`.
 - Logout is handled by token blacklisting in memory until token expiration.
